@@ -1,5 +1,6 @@
 <?php
 require_once 'exexception.php';
+require_once 'utils.php';
 
 class apiEngine {
 
@@ -21,7 +22,11 @@ class apiEngine {
 				require_once $apiList[$apiName];
 				$api = new API();
 				if (method_exists($api, $apiFunction)) {
-					$json_data = $api->$apiFunction($params);
+                    try {
+                        $json_data = $api->$apiFunction($params);
+                    } catch (exException $ex) {
+                        throw $ex;
+                    }
 				}
 				else throw new exException("Несуществующий метод API $apiName", 1067);
 			} else throw new exException("Несуществующее название API", 1066);

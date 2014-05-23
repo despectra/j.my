@@ -24,16 +24,7 @@
                 }
                 $my->select("events", array("*"), "permission & $level > 0 ORDER BY datetime DESC$limit");
 
-                $data = array();
-                while ($row = $my->fetchRow()) {
-                    array_push(
-                        $data,
-                        array(
-                            "id" => $row["id"],
-                            "text" => $row["text"],
-                            "datetime" => $row["datetime"]
-                        ));
-                }
+                $data = Utils::dbRowsToAssocArrays($my, array("id", "text", "datetime"));
                 return array(
                     "success" => "1",
                     "events" => $data

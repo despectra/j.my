@@ -21,7 +21,8 @@
             }
             $row = $dbConnection->fetchRow();
             $level = $row["level"];
-            // TODO CONTINUE
+            // TODO CONTINUE CHECKING LEVEL
+
             return $level;
         }
 	}

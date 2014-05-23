@@ -47,8 +47,9 @@
 			try {
 				$my = new MySQLDb();
 				$my->connect();
+                $token = $params["token"];
 				$uid =  Checker::checkToken($params, $my);
-				$my->executeQuery("DELETE FROM tokens WHERE uid = $uid");
+				$my->executeQuery("DELETE FROM tokens WHERE uid = $uid AND token = '$token'");
 				return array("success" => 1);
 			}
 			catch (exException $e) {
