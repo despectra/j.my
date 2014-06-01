@@ -55,8 +55,8 @@ class API {
      */
 
     public function addStudentInGroup($params) {
+        $my = new MySQLDb();
         try {
-            $my = new MySQLDb();
             $my->connect();
             $uid = Checker::checkToken($params, $my);
             Checker::checkLevel($uid, 0, $my);
@@ -102,8 +102,8 @@ class API {
     }
 
     public function deleteStudents($params) {
+        $my = new MySQLDb();
         try {
-            $my = new MySQLDb();
             $my->connect();
             $uid = Checker::checkToken($params, $my);
             Checker::checkLevel($uid, 0, $my);
@@ -122,8 +122,8 @@ class API {
     }
 
     public function deleteStudentsByGroup($params) {
+        $my = new MySQLDb();
         try {
-            $my = new MySQLDb();
             $my->connect();
             $uid = Checker::checkToken($params, $my);
             Checker::checkLevel($uid, 0, $my);
@@ -151,9 +151,9 @@ class API {
             $dbConnection->select("users, students", array("users.id"), "students.user_id = users.id AND students.id = $id LIMIT 1");
             $row = $dbConnection->fetchRow();
             $uid = $row["id"];
-            $dbConnection->delete("users", "id = $uid");
-            $dbConnection->delete("students", "id = $id");
             $dbConnection->delete("students_groups", "student_id = $id");
+            $dbConnection->delete("students", "id = $id");
+            $dbConnection->delete("users", "id = $uid");
         }
     }
 

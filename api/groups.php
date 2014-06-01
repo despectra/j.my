@@ -83,7 +83,7 @@
         /*
          * groups.editGroup={"token":"your_token", "id":4, "data" : {"name": "9B", "parent_id":4}}
          */
-        function editGroup($params) {
+        function updateGroup($params) {
             $my = new MySQLDb();
             $my->connect();
             $uid = Checker::checkToken($params, $my);

@@ -6,6 +6,7 @@
 		'events' => 'events.php',
         'groups' => 'groups.php',
         'students' => 'students.php',
-        'subjects' => 'subjects.php'
+        'subjects' => 'subjects.php',
+        'teachers' => 'teachers.php'
 		);
 ?>
