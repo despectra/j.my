@@ -7,6 +7,9 @@
  */
 
 class Utils {
+    public static $_SALT_1 = "omnomnomYEhToP4>dfoseofijsdfjjjw";
+    public static $_SALT_2 = "IUiun84N98sNiuU<<>>><,.!!@9j";
+
     public static function dbRowsToAssocArrays($dbHandler, $columns) {
         $data = array();
         while ($row = $dbHandler->fetchRow()) {

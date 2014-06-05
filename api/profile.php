@@ -18,18 +18,20 @@
 				$surname = $row['surname'];
 				$level = $row['level']; 
 				$home = $row['home'];
-				$avatar = $_SERVER['SERVER_NAME'].$home."/avatar_square_min.jpg"; //Костыль
+				$avatar = $_SERVER['SERVER_NAME']."/$home/avatar_square_min.jpg"; //Костыль
 				//$avatar_path = "..".$home."/avatar_square.jpg";
 				//header('content-type: image/jpeg');
 				//$avatar = file_get_contents("..".$home."/avatar_square.jpg");
 				//echo $avatar;
 
-				$returnArray = array("uid" => $uid, 
-							 "name" => "$name", 
-							 "middlename" => "$middlename", 
-							 "surname" => "$surname",
-							 "level" => $level,
-							 "avatar" => "$avatar");
+				$returnArray = array(
+                    "success" => "1",
+                    "uid" => $uid,
+                     "name" => "$name",
+                     "middlename" => "$middlename",
+                     "surname" => "$surname",
+                     "level" => $level,
+                     "avatar" => "$avatar");
 				return $returnArray;
 			}
 			catch (exException $e) {

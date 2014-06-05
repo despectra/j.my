@@ -62,7 +62,6 @@ class API {
             Checker::checkLevel($uid, 0, $my);
             $groupId = $params["group_id"];
             $login = $params["login"];
-            $passwd = $params["passwd"];
             $name = $params["name"];
             $middlename = $params["middlename"];
             $surname = $params["surname"];
@@ -70,7 +69,7 @@ class API {
             $my->beginTransaction();
             $userArray = array (
                 "login" => $login,
-                "passwd" => $passwd,
+                "passwd" => md5(Utils::$_SALT_1.md5("000101").Utils::$_SALT_2),
                 "name" => $name,
                 "middlename" => $middlename,
                 "surname" => $surname,
@@ -90,6 +89,7 @@ class API {
             );
             $linkId = $my->insert("students_groups", $groupLinkArray);
             $my->commit();
+            mkdir("../home/$login");
             return array(
                 "success" => "1",
                 "user_id" => $userId,

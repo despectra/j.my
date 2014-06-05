@@ -9,12 +9,12 @@
 		}
 
 		function getStatus() {
-			$returnArray = array ("ok" => true);
+			$returnArray = array ("success" => "1");
 			return $returnArray;
 		}
 
 		function getInfo() {
-			$returnArray = array ("ok" => true, "version" => "0.1");
+			$returnArray = array ("success" => "1", "version" => "0.1");
 			return $returnArray;
 		}
 	}
