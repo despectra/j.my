@@ -7,6 +7,7 @@
  */
     require_once 'mysqlbd.php';
     require_once 'checker.php';
+    require_once 'users.php';
 
     class API {
         function __construct() {
@@ -26,16 +27,7 @@
                 $login = $params["login"];
 
                 $my->beginTransaction();
-                $user = array(
-                    "login" => $login,
-                    "passwd" => md5(Utils::$_SALT_1.md5("000111").Utils::$_SALT_2),
-                    "name" => $firstName,
-                    "surname" => $secondName,
-                    "middlename" => $middleName,
-                    "home" => "/home/$login",
-                    "level" => 4
-                );
-                $userId = $my->insert("users", $user);
+                $userId = Users::addUser($my, $login, $firstName, $secondName, $middleName, 4);
                 $teacher = array(
                     "user_id" => $userId
                 );
@@ -142,6 +134,7 @@
                 $dbConnection->select("users INNER JOIN teachers ON users.id = teachers.user_id", array("users.id"), "teachers.id = $id LIMIT 1");
                 $row = $dbConnection->fetchRow();
                 $uid = $row["id"];
+                $dbConnection->delete("tokens", "uid = $uid");
                 $dbConnection->delete("teachers", "id = $id");
                 $dbConnection->delete("users", "id = $uid");
             }

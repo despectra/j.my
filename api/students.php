@@ -8,6 +8,7 @@
 
 require_once 'mysqlbd.php';
 require_once 'checker.php';
+require_once 'users.php';
 
 class API {
     function __construct() {
@@ -67,16 +68,7 @@ class API {
             $surname = $params["surname"];
 
             $my->beginTransaction();
-            $userArray = array (
-                "login" => $login,
-                "passwd" => md5(Utils::$_SALT_1.md5("000101").Utils::$_SALT_2),
-                "name" => $name,
-                "middlename" => $middlename,
-                "surname" => $surname,
-                "home" => "/home/$login",
-                "level" => 2
-            );
-            $userId = $my->insert("users", $userArray);
+            $userId = Users::addUser($my, $login, $name, $surname, $middlename, 2);
 
             $studentArray = array(
                 "user_id" => $userId
@@ -153,7 +145,7 @@ class API {
             $uid = $row["id"];
             $dbConnection->delete("students_groups", "student_id = $id");
             $dbConnection->delete("students", "id = $id");
-            $dbConnection->delete("users", "id = $uid");
+
         }
     }
 

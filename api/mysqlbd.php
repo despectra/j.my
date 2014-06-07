@@ -34,7 +34,7 @@
 			}
 			catch (PDOException $e) {
 				//throw new exException("Внутренняя ошибка SQL", 3999);
-				throw new exException($e->getMessage(), 3999);
+				throw new exException("Внутренняя ошибка SQL: ".$e->getMessage(), 3999);
 			}
 		}
 		function select($table, $fields, $conditions = '') {
@@ -46,7 +46,7 @@
 				$this->sth->setFetchMode(PDO::FETCH_ASSOC);
 			}
 			catch (PDOException $e) {
-				throw new exException("Внутренняя ошибка SQL $e", 3999);
+				throw new exException("Внутренняя ошибка SQL: ".$e->getMessage(), 3999);
 				//throw new exException($e->getMessage(), 3999);
 			}
 		}
@@ -56,7 +56,7 @@
 				return $this->sth->fetch(PDO::FETCH_ASSOC);
 			}
 			catch (PDOException $e) {
-				throw new exException("Внутренняя ошибка SQL", 3999);
+				throw new exException("Внутренняя ошибка SQL: ".$e->getMessage(), 3999);
 			}
 		}
 
@@ -65,7 +65,7 @@
 				return $this->sth->rowCount();
 			}
 			catch (PDOException $e) {
-				throw new exException("Внутренняя ошибка SQL", 3999);
+				throw new exException("Внутренняя ошибка SQL: ".$e->getMessage(), 3999);
 			}
 		}
 
@@ -79,7 +79,7 @@
 					return $this->dbh->lastInsertId();
 				}
 				catch (PDOException $e) {
-					throw new exException("Внутренняя ошибка SQL", 3999);
+					throw new exException("Внутренняя ошибка SQL: ".$e->getMessage(), 3999);
 				}
 			}
 			else throw new exException("Данные для вставки в таблицу не обнаружены", 3012);	
@@ -101,7 +101,7 @@
                     $this->sth->execute($data);
                     return $this->sth->rowCount();
                 } catch (PDOException $e) {
-                    throw new exException("Внутренняя ошибка SQL", 3999);
+                    throw new exException("Внутренняя ошибка SQL: ".$e->getMessage(), 3999);
                 }
             } else {
                 throw new exException("Данные для обновления не обнаружены", 3012);
@@ -119,7 +119,7 @@
                 return $this->sth->rowCount();
             }
             catch (PDOException $e) {
-                throw new exException("Внутренняя ошибка SQL", 3999);
+                throw new exException("Внутренняя ошибка SQL: ".$e->getMessage(), 3999);
             }
 		}
 
@@ -160,7 +160,7 @@
                 $this->sth->execute();
 			}
 			catch (PDOException $e) {
-				throw new exException("Внутренняя ошибка SQL", 3999);
+				throw new exException("Внутренняя ошибка SQL: ".$e->getMessage(), 3999);
 			}
 		}
 
