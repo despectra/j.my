@@ -198,7 +198,7 @@
             return $this->setOrUnsetSubjects(false, $params);
         }
 
-        private function setOrUnsetSubjects($doLink, $params) {
+        private function setOrUnsetSubjects($set, $params) {
             $my = new MySQLDb();
             $my->connect();
             $uid = Checker::checkToken($params, $my);
@@ -206,11 +206,11 @@
 
             $teacherId = $params["teacher_id"];
 
-            $ids = $params[$doLink ? "subjects_ids" : "links_ids"];
+            $ids = $params[$set ? "subjects_ids" : "links_ids"];
 
             $affectedLinksArray = array();
             foreach ($ids as $id) {
-                if ($doLink) {
+                if ($set) {
                     $newLink = $my->insert("teachers_subjects",
                         array(
                             "subject_id" => $id,
@@ -225,9 +225,8 @@
                     }
                 }
             }
-            return $doLink
+            return $set
                 ? array("success" => "1", "affected_links" => $affectedLinksArray)
                 : array("success" => "1");
         }
-
     }

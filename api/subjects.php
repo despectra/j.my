@@ -104,4 +104,60 @@ class API {
         }
     }
 
+    public function getGroupsOfTeachersSubject($params) {
+        $my = new MySQLDb();
+        $my->connect();
+        $uid = Checker::checkToken($params, $my);
+        Checker::checkLevel($uid, 0, $my);
+
+        $teacherSubjectId = $params["ts_id"];
+        $my->select("teachers_subjects_groups", array("id, group_id"), "teacher_subject_id = $teacherSubjectId");
+        $subjectsArray = array();
+        while ($row = ($my->fetchRow())) {
+            array_push($subjectsArray,
+                array("id" => $row["id"], "group_id" => $row["group_id"]));
+        }
+        return array(
+            "success" => "1",
+            "groups" => $subjectsArray
+        );
+    }
+
+    public function setGroupsOfTeachersSubject($params) {
+        return $this->setOrUnsetGroups(true, $params);
+    }
+
+    public function unsetGroupsOfTeachersSubject($params) {
+        return $this->setOrUnsetGroups(false, $params);
+    }
+
+    private function setOrUnsetGroups($set, $params) {
+        $my = new MySQLDb();
+        $my->connect();
+        $uid = Checker::checkToken($params, $my);
+        Checker::checkLevel($uid, 0, $my);
+
+        $teacherId = $params["ts_link_id"];
+        $ids = $params[$set ? "groups_ids" : "links_ids"];
+        $affectedLinksArray = array();
+        foreach ($ids as $id) {
+            if ($set) {
+                $newLink = $my->insert("teachers_subjects_groups",
+                    array(
+                        "group_id" => $id,
+                        "teacher_subject_id" => $teacherId
+                    )
+                );
+                array_push($affectedLinksArray, $newLink);
+            } else {
+                $count = $my->delete("teachers_subjects_groups", "id = $id");
+                if ($count > 0) {
+                    array_push($affectedLinksArray, $id);
+                }
+            }
+        }
+        return $set
+            ? array("success" => "1", "affected_links" => $affectedLinksArray)
+            : array("success" => "1");
+    }
 }
