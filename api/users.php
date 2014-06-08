@@ -8,8 +8,8 @@
 
 class Users {
     public static function addUser($dbConn, $login, $firstName, $secondName, $middleName, $level) {
-        $dbConn->select("users", array("id"), "login = $login");
-        if($row = $dbConn->fetchRow() && $dbConn->rowCount() > 0) {
+        $dbConn->select("users", array("id"), "login = '$login'");
+        if(($row = $dbConn->fetchRow()) && $dbConn->rowCount() > 0) {
             throw new exException("Пользователь с логином $login уже существует", 101);
         }
         $user = array(
@@ -28,13 +28,15 @@ class Users {
     public static function deleteUser($dbConn, $uid) {
         $dbConn->select("users", array("login"), "id = $uid");
         $login = "";
-        if($row = $dbConn->fetchRow() && $dbConn->rowCount() > 0) {
+        if(($row = $dbConn->fetchRow()) && $dbConn->rowCount() > 0) {
             $login = $row["login"];
         } else {
             return;
         }
         $dbConn->delete("tokens", "uid = $uid");
         $dbConn->delete("users", "id = $uid");
-        rmdir("../home/$login");
+       if(is_dir("../home/$login")) {
+           rmdir("../home/$login");
+       }
     }
 } 

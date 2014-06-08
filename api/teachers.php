@@ -134,9 +134,8 @@
                 $dbConnection->select("users INNER JOIN teachers ON users.id = teachers.user_id", array("users.id"), "teachers.id = $id LIMIT 1");
                 $row = $dbConnection->fetchRow();
                 $uid = $row["id"];
-                $dbConnection->delete("tokens", "uid = $uid");
                 $dbConnection->delete("teachers", "id = $id");
-                $dbConnection->delete("users", "id = $uid");
+                Users::deleteUser($dbConnection, $uid);
             }
         }
 

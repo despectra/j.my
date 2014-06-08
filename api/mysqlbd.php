@@ -41,7 +41,9 @@
 			try {
 				$strFields = implode(',', $fields);
 				$query = "SELECT $strFields FROM $table ";
-				if ($conditions != '') $query.="WHERE $conditions";
+				if ($conditions != '') {
+                    $query.="WHERE $conditions";
+                }
 				$this->sth = $this->dbh->query($query);
 				$this->sth->setFetchMode(PDO::FETCH_ASSOC);
 			}

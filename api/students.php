@@ -145,7 +145,7 @@ class API {
             $uid = $row["id"];
             $dbConnection->delete("students_groups", "student_id = $id");
             $dbConnection->delete("students", "id = $id");
-
+            Users::deleteUser($dbConnection, $uid);
         }
     }
 
