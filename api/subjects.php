@@ -110,7 +110,7 @@ class API {
         $uid = Checker::checkToken($params, $my);
         Checker::checkLevel($uid, 0, $my);
 
-        $teacherSubjectId = $params["ts_id"];
+        $teacherSubjectId = $params["teacher_subject_id"];
         $my->select("teachers_subjects_groups", array("id, group_id"), "teacher_subject_id = $teacherSubjectId");
         $subjectsArray = array();
         while ($row = ($my->fetchRow())) {
@@ -137,7 +137,7 @@ class API {
         $uid = Checker::checkToken($params, $my);
         Checker::checkLevel($uid, 0, $my);
 
-        $teacherId = $params["ts_link_id"];
+        $teachersSubjectId = $params["teacher_subject_id"];
         $ids = $params[$set ? "groups_ids" : "links_ids"];
         $affectedLinksArray = array();
         foreach ($ids as $id) {
@@ -145,7 +145,7 @@ class API {
                 $newLink = $my->insert("teachers_subjects_groups",
                     array(
                         "group_id" => $id,
-                        "teacher_subject_id" => $teacherId
+                        "teacher_subject_id" => $teachersSubjectId
                     )
                 );
                 array_push($affectedLinksArray, $newLink);
