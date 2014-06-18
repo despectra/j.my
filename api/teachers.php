@@ -66,7 +66,7 @@
                                       users.surname AS surname
                                 FROM users
                                 INNER JOIN teachers ON users.id = teachers.user_id
-                                $limit");
+                                $limit", array());
             $data = array();
             while($row = $my->fetchRow()) {
                 array_push($data, $row);
@@ -89,8 +89,8 @@
                                       users.middlename AS middlename,
                                       users.surname AS surname,
                                       users.level AS level FROM users INNER JOIN teachers ON users.id = teachers.user_id
-                                WHERE teachers.id = $teacherId
-                                LIMIT 1");
+                                WHERE teachers.id = :teacherId
+                                LIMIT 1", array("teacherId" => $teacherId));
             if ($row = $my->fetchRow()) {
                 return array(
                     "success" => "1",
@@ -151,30 +151,6 @@
             while ($row = ($my->fetchRow())) {
                 array_push($subjectsArray,
                     array("id" => $row["id"], "subject_id" => $row["subject_id"]));
-            }
-            return array(
-                "success" => "1",
-                "subjects" => $subjectsArray
-            );
-        }
-
-        public function getAvailableSubjectsForTeacher($params) {
-            $my = new MySQLDb();
-            $my->connect();
-            $uid = Checker::checkToken($params, $my);
-            Checker::checkLevel($uid, 0, $my);
-
-            $teacherId = $params["teacher_id"];
-            $my->executeQuery("
-                SELECT id, name FROM subjects
-                WHERE id NOT IN (SELECT subject_id FROM teachers_subjects WHERE teacher_id = $$teacherId)"
-            );
-            $subjectsArray = array();
-            while ($row = $my->fetchRow()) {
-                array_push($subjectsArray,
-                    array("id" => $row["id"],
-                        "name" => $row["name"])
-                );
             }
             return array(
                 "success" => "1",

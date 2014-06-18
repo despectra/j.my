@@ -156,10 +156,10 @@
             };
         }
 
-		function executeQuery($query) {
+		function executeQuery($query, $queryArgs) {
 			try {
 				$this->sth = $this->dbh->prepare($query);
-                $this->sth->execute();
+                $this->sth->execute($queryArgs);
 			}
 			catch (PDOException $e) {
 				throw new exException("Внутренняя ошибка SQL: ".$e->getMessage(), 3999);

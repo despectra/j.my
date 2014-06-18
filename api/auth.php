@@ -42,7 +42,10 @@
             $my->connect();
             $token = $params["token"];
             $uid =  Checker::checkToken($params, $my);
-            $my->executeQuery("DELETE FROM tokens WHERE uid = $uid AND token = '$token'");
+            $my->executeQuery(
+                "DELETE FROM tokens WHERE uid = :uid AND token = :token",
+                array("uid" => $uid, "token" => $token)
+            );
             return array("success" => 1);
 		}
 

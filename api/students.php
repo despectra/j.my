@@ -36,7 +36,7 @@ class API {
                                 FROM users
                                 INNER JOIN students ON users.id = students.user_id
                                 INNER JOIN students_groups ON students.id = students_groups.student_id
-                                WHERE students_groups.group_id =$groupId");
+                                WHERE students_groups.group_id =:groupId", array("groupId" => $groupId));
             $data = array();
             while($row = $my->fetchRow()) {
                 array_push($data, $row);
