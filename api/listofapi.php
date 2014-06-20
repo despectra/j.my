@@ -7,6 +7,7 @@
         'groups' => 'groups.php',
         'students' => 'students.php',
         'subjects' => 'subjects.php',
-        'teachers' => 'teachers.php'
+        'teachers' => 'teachers.php',
+        'schedule' => 'schedule.php'
 		);
 ?>

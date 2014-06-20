@@ -21,12 +21,13 @@ class API {
         Checker::checkLevel($uid, 0, $my);
 
         $groupId = $params["group_id"];
-        $query = "SELECT teachers_subjects_groups.id as tsg_id,
+        $query = "SELECT schedule.teacher_subject_group as tsg,
+                        schedule.id as id,
                         schedule.day as day,
                         schedule.lesson_number as lesson_number
                   FROM schedule
                   JOIN teachers_subjects_groups
-                  ON schedule.teacher_subject_group = teacher_subject_group.id
+                  ON schedule.teacher_subject_group = teachers_subjects_groups.id
                   WHERE teachers_subjects_groups.group_id = :groupId";
         $queryArgs = array("groupId" => $groupId);
         $my->executeQuery($query, $queryArgs);
@@ -83,6 +84,24 @@ class API {
     }
 
     public function deleteScheduleItems($params) {
-        //TODO
+        $my = new MySQLDb();
+        $my->connect();
+        $uid = Checker::checkToken($params, $my);
+        Checker::checkLevel($uid, 0, $my);
+
+        $itemsIds = $params["schedule_items_ids"];
+        $my->beginTransaction();
+        try {
+            foreach ($itemsIds as $id) {
+                $my->delete("schedule", "id = $id");
+            }
+        } catch(exException $e) {
+            $my->rollBack();
+            throw $e;
+        }
+        $my->commit();
+        return array(
+            "success" => "1"
+        );
     }
 }

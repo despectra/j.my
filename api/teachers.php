@@ -139,23 +139,34 @@
             }
         }
 
+        public function getSubjectsOfAllTeachers($params) {
+            return $this->getSubjectsOfTeacherImpl(true, $params);
+        }
+
         public function getSubjectsOfTeacher($params) {
+            return $this->getSubjectsOfTeacherImpl(false, $params);
+        }
+
+        private function getSubjectsOfTeacherImpl($forAll, $params) {
             $my = new MySQLDb();
             $my->connect();
             $uid = Checker::checkToken($params, $my);
             Checker::checkLevel($uid, 0, $my);
 
-            $teacherId = $params["teacher_id"];
-            $my->select("teachers_subjects", array("id, subject_id"), "teacher_id = $teacherId");
-            $subjectsArray = array();
+            if (!$forAll) {
+                $teacherId = $params["teacher_id"];
+                $my->select("teachers_subjects", array("id, subject_id"), "teacher_id = $teacherId");
+            } else {
+                $my->select("teachers_subjects", array("id", "teacher_id", "subject_id"));
+            }
+            $resultArray = array();
             while ($row = ($my->fetchRow())) {
-                array_push($subjectsArray,
-                    array("id" => $row["id"], "subject_id" => $row["subject_id"]));
+                array_push($resultArray, $row);
             }
             return array(
-                "success" => "1",
-                "subjects" => $subjectsArray
-            );
+                    "success" => "1",
+                    "subjects" => $resultArray
+                );
         }
 
         public function setSubjectsOfTeacher($params) {

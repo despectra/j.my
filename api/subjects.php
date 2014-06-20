@@ -104,18 +104,29 @@ class API {
         }
     }
 
+    public function getGroupsOfAllTeachersSubjects($params) {
+        return $this->getGroupsOfTeachersSubjectImpl($params, true);
+    }
+
     public function getGroupsOfTeachersSubject($params) {
+        return $this->getGroupsOfTeachersSubjectImpl($params, false);
+    }
+
+    private function getGroupsOfTeachersSubjectImpl($params, $forAll) {
         $my = new MySQLDb();
         $my->connect();
         $uid = Checker::checkToken($params, $my);
         Checker::checkLevel($uid, 0, $my);
 
-        $teacherSubjectId = $params["teacher_subject_id"];
-        $my->select("teachers_subjects_groups", array("id, group_id"), "teacher_subject_id = $teacherSubjectId");
+        if (!$forAll) {
+            $teacherSubjectId = $params["teacher_subject_id"];
+            $my->select("teachers_subjects_groups", array("id", "group_id"), "teacher_subject_id = $teacherSubjectId");
+        } else {
+            $my->select("teachers_subjects_groups", array("id", "teacher_subject_id", "group_id"));
+        }
         $subjectsArray = array();
         while ($row = ($my->fetchRow())) {
-            array_push($subjectsArray,
-                array("id" => $row["id"], "group_id" => $row["group_id"]));
+            array_push($subjectsArray, $row);
         }
         return array(
             "success" => "1",
