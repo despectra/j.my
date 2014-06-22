@@ -29,9 +29,9 @@
             return array(
                 "success" => "1",
                 "group" => array(
-                    "id" => $row["id"],
+                    "group_id" => $row["id"],
                     "name" => $row["name"],
-                    "parent_group" => $row["parent_id"]
+                    "parent_id" => $row["parent_id"]
                 )
             );
         }
@@ -52,8 +52,8 @@
                 $limit = " LIMIT $offset, $count";
             }
             $parentId = $params["parent_group_id"];
-            $my->select("groups", array("*"), "parent_id = $parentId$limit");
-            $data = Utils::dbRowsToAssocArrays($my, array("id", "name", "parent_id"));
+            $my->select("groups", array("id as group_id", "name", "parent_id"), "parent_id = $parentId$limit");
+            $data = Utils::dbRowsToAssocArrays($my, array("group_id", "name", "parent_id"));
             return array(
                 "success" => "1",
                 "groups" => $data

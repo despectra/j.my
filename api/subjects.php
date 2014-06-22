@@ -42,8 +42,8 @@ class API {
         if ($offset != "0" || $count != "0") {
             $limit = " LIMIT $offset, $count";
         }
-        $my->select("subjects", array("*"), $limit);
-        $data = Utils::dbRowsToAssocArrays($my, array("id", "name"));
+        $my->select("subjects", array("id as subject_id", "name"), $limit);
+        $data = Utils::dbRowsToAssocArrays($my, array("subject_id", "name"));
         return array(
             "success" => "1",
             "subjects" => $data
@@ -62,7 +62,7 @@ class API {
         return array(
             "success" => "1",
             "subject" => array(
-                "id" => $row["id"],
+                "subject_id" => $row["id"],
                 "name" => $row["name"]
             )
         );
@@ -120,9 +120,12 @@ class API {
 
         if (!$forAll) {
             $teacherSubjectId = $params["teacher_subject_id"];
-            $my->select("teachers_subjects_groups", array("id", "group_id"), "teacher_subject_id = $teacherSubjectId");
+            $my->select("teachers_subjects_groups",
+                array("id as teacher_subject_group_id", "group_id"),
+                "teacher_subject_id = $teacherSubjectId");
         } else {
-            $my->select("teachers_subjects_groups", array("id", "teacher_subject_id", "group_id"));
+            $my->select("teachers_subjects_groups",
+                array("id as teacher_subject_group_id", "teacher_subject_id", "group_id"));
         }
         $subjectsArray = array();
         while ($row = ($my->fetchRow())) {

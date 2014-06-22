@@ -22,9 +22,9 @@
                 } else {
                     $limit = "";
                 }
-                $my->select("events", array("*"), "permission & $level > 0 ORDER BY datetime DESC$limit");
+                $my->select("events", array("id as event_id", "text", "datetime"), "permission & $level > 0 ORDER BY datetime DESC$limit");
 
-                $data = Utils::dbRowsToAssocArrays($my, array("id", "text", "datetime"));
+                $data = Utils::dbRowsToAssocArrays($my, array("event_id", "text", "datetime"));
                 return array(
                     "success" => "1",
                     "events" => $data

@@ -105,7 +105,7 @@
                 return array(
                     "success" => "0",
                     "error_code" => "100",
-                    "error_message" => "Данного учителя нет в базе. Возможно, он был удален"
+                    "error_message" => "Данного учителя нет в базе. Скорее всего, он был удален"
                 );
             }
         }
@@ -155,9 +155,9 @@
 
             if (!$forAll) {
                 $teacherId = $params["teacher_id"];
-                $my->select("teachers_subjects", array("id, subject_id"), "teacher_id = $teacherId");
+                $my->select("teachers_subjects", array("id as teacher_subject_id, subject_id"), "teacher_id = $teacherId");
             } else {
-                $my->select("teachers_subjects", array("id", "teacher_id", "subject_id"));
+                $my->select("teachers_subjects", array("id as teacher_subject_id", "teacher_id", "subject_id"));
             }
             $resultArray = array();
             while ($row = ($my->fetchRow())) {

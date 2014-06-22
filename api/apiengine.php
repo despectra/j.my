@@ -23,6 +23,7 @@ class apiEngine {
 				$api = new API();
 				if (method_exists($api, $apiFunction)) {
                     try {
+                        //sleep(3);
                         $json_data = $api->$apiFunction($params);
                     } catch (exException $ex) {
                         throw $ex;

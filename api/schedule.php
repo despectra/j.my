@@ -21,8 +21,8 @@ class API {
         Checker::checkLevel($uid, 0, $my);
 
         $groupId = $params["group_id"];
-        $query = "SELECT schedule.teacher_subject_group as tsg,
-                        schedule.id as id,
+        $query = "SELECT schedule.teacher_subject_group as teacher_subject_group_id,
+                        schedule.id as schedule_item_id,
                         schedule.day as day,
                         schedule.lesson_number as lesson_number
                   FROM schedule
@@ -54,7 +54,7 @@ class API {
 
         //TODO check whether group and teacher are not busy this lesson
         $inserted = $my->insert("schedule",
-            array("day" => $day, "lesson_number" => $lessonNum, "teacher_subject_group" => $tsgId));
+            array("day" => $day, "lesson_number" => $lessonNum, "teacher_subject_group_id" => $tsgId));
         return array(
             "success" => "1",
             "schedule_item_id" => $inserted

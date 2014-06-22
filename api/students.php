@@ -26,7 +26,7 @@ class API {
             Checker::checkLevel($uid, 0, $my);
             //CHECK LEVEL HERE
             $groupId = $params["group_id"];
-            $my->executeQuery("SELECT students_groups.student_id AS student_group_link_id,
+            $my->executeQuery("SELECT students_groups.id AS student_group_id,
                                       students.id AS student_id,
                                       users.id AS user_id,
                                       users.login AS login,
@@ -86,7 +86,7 @@ class API {
                 "success" => "1",
                 "user_id" => $userId,
                 "student_id" => $studentId,
-                "student_group_link_id" => $linkId);
+                "student_group_id" => $linkId);
         } catch (exException $e) {
             $my->rollBack();
             throw $e;
