@@ -30,9 +30,9 @@ class API {
                                       students.id AS student_id,
                                       users.id AS user_id,
                                       users.login AS login,
-                                      users.name AS name,
-                                      users.middlename AS middlename,
-                                      users.surname AS surname
+                                      users.first_name AS first_name,
+                                      users.middle_name AS middle_name,
+                                      users.last_name AS last_name
                                 FROM users
                                 INNER JOIN students ON users.id = students.user_id
                                 INNER JOIN students_groups ON students.id = students_groups.student_id
@@ -63,9 +63,9 @@ class API {
             Checker::checkLevel($uid, 0, $my);
             $groupId = $params["group_id"];
             $login = $params["login"];
-            $name = $params["name"];
-            $middlename = $params["middlename"];
-            $surname = $params["surname"];
+            $name = $params["first_name"];
+            $middlename = $params["middle_name"];
+            $surname = $params["last_name"];
 
             $my->beginTransaction();
             $userId = Users::addUser($my, $login, $name, $surname, $middlename, 2);
@@ -140,11 +140,9 @@ class API {
 
     private function deleteStudentsImpl($studentIds, $dbConnection) {
         foreach($studentIds as $id) {
-            $dbConnection->select("users, students", array("users.id"), "students.user_id = users.id AND students.id = $id LIMIT 1");
+            $dbConnection->select("users JOIN students ON users.id = students.user_id", array("users.id"), "students.id = $id LIMIT 1");
             $row = $dbConnection->fetchRow();
             $uid = $row["id"];
-            $dbConnection->delete("students_groups", "student_id = $id");
-            $dbConnection->delete("students", "id = $id");
             Users::deleteUser($dbConnection, $uid);
         }
     }

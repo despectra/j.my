@@ -21,9 +21,9 @@
                 $uid = Checker::checkToken($params, $my);
                 Checker::checkLevel($uid, 0, $my);
 
-                $firstName = $params["firstName"];
-                $middleName = $params["middleName"];
-                $secondName = $params["secondName"];
+                $firstName = $params["first_name"];
+                $middleName = $params["middle_name"];
+                $secondName = $params["last_name"];
                 $login = $params["login"];
 
                 $my->beginTransaction();
@@ -61,9 +61,9 @@
             $my->executeQuery("SELECT teachers.id AS teacher_id,
                                       users.id AS user_id,
                                       users.login AS login,
-                                      users.name AS name,
-                                      users.middlename AS middlename,
-                                      users.surname AS surname
+                                      users.first_name AS first_name,
+                                      users.middle_name AS middle_name,
+                                      users.last_name AS last_name
                                 FROM users
                                 INNER JOIN teachers ON users.id = teachers.user_id
                                 $limit", array());
@@ -85,22 +85,16 @@
             $teacherId = $params["teacher_id"];
             $my->executeQuery("SELECT users.id AS user_id,
                                       users.login AS login,
-                                      users.name AS name,
-                                      users.middlename AS middlename,
-                                      users.surname AS surname,
-                                      users.level AS level FROM users INNER JOIN teachers ON users.id = teachers.user_id
+                                      users.first_name AS first_name,
+                                      users.middle_name AS middle_name,
+                                      users.last_name AS last_name,
+                                      users.level AS level
+                                FROM users INNER JOIN teachers ON users.id = teachers.user_id
                                 WHERE teachers.id = :teacherId
                                 LIMIT 1", array("teacherId" => $teacherId));
             if ($row = $my->fetchRow()) {
-                return array(
-                    "success" => "1",
-                    "user_id" => $row["user_id"],
-                    "login" => $row["login"],
-                    "name" => $row["name"],
-                    "middlename" => $row["middlename"],
-                    "surname" => $row["surname"],
-                    "level" => $row["level"]
-                );
+                $row["success"] = 1;
+                return $row;
             } else {
                 return array(
                     "success" => "0",
@@ -134,7 +128,6 @@
                 $dbConnection->select("users INNER JOIN teachers ON users.id = teachers.user_id", array("users.id"), "teachers.id = $id LIMIT 1");
                 $row = $dbConnection->fetchRow();
                 $uid = $row["id"];
-                $dbConnection->delete("teachers", "id = $id");
                 Users::deleteUser($dbConnection, $uid);
             }
         }

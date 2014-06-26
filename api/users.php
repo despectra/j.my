@@ -15,9 +15,9 @@ class Users {
         $user = array(
             "login" => $login,
             "passwd" => md5(Utils::$_SALT_1.md5("000111").Utils::$_SALT_2),
-            "name" => $firstName,
-            "surname" => $secondName,
-            "middlename" => $middleName,
+            "first_name" => $firstName,
+            "last_name" => $secondName,
+            "middle_name" => $middleName,
             "home" => "/home/$login",
             "level" => $level
         );
@@ -33,7 +33,6 @@ class Users {
         } else {
             return;
         }
-        $dbConn->delete("tokens", "uid = $uid");
         $dbConn->delete("users", "id = $uid");
        if(is_dir("../home/$login")) {
            rmdir("../home/$login");
